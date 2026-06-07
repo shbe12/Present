@@ -5,7 +5,10 @@ class DashboardController < ApplicationController
     @treasury_balance = Payment.sum(:amount) - Expense.sum(:amount)
     @total_charged    = Charge.sum(:amount)
     @total_paid       = Payment.sum(:amount)
-    @outstanding      = @total_charged - @total_paid
+    @outstanding      =  Member.includes(:charges, :payments)
+                                .sum(&:amount_owed)
+    @expense          = Expense.sum(:amount)
+
 
     @recent_attendances = Attendance.includes(:member).order(date: :desc).limit(5)
     @recent_payments    = Payment.includes(:member).recent.limit(5)

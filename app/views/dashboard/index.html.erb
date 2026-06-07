@@ -18,7 +18,7 @@
   <div class="col-sm-6 col-lg-3">
     <div class="card h-100">
       <div class="card-body">
-        <h6 class="card-subtitle text-muted">Outstanding balances</h6>
+        <h6 class="card-subtitle text-muted">Outstanding Balance (Members Owe)</h6>
         <p class="display-6 mb-0 <%= "text-danger" if @outstanding.positive? %>"><%= money(@outstanding) %></p>
       </div>
     </div>
@@ -28,6 +28,14 @@
       <div class="card-body">
         <h6 class="card-subtitle text-muted">Total collected</h6>
         <p class="display-6 mb-0"><%= money(@total_paid) %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted">Total expenses</h6>
+        <p class="display-6 mb-0"><%= money(@expense) %></p>
       </div>
     </div>
   </div>

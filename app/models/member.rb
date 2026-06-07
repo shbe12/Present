@@ -16,6 +16,10 @@ class Member < ApplicationRecord
     charges.sum(&:amount) - payments.sum(&:amount)
   end
 
+  def amount_owed
+    [balance_due, 0].max
+  end
+
   def to_s
     name
   end
