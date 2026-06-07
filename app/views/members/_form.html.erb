@@ -1,0 +1,12 @@
+<%= simple_form_for @member do |f| %>
+  <%= f.input :name %>
+  <%= f.input :phone %>
+  <%= f.input :email %>
+  <%= f.input :joined_on, as: :date, html5: true %>
+  <%= f.input :active %>
+
+  <div class="d-flex gap-2">
+    <%= f.button :submit, class: "btn btn-primary" %>
+    <%= link_to "Cancel", members_path, class: "btn btn-link" %>
+  </div>
+<% end %>

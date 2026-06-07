@@ -1,0 +1,12 @@
+<%= simple_form_for @payment do |f| %>
+  <%= f.association :member, collection: Member.order(:name), include_blank: false %>
+  <%= f.input :amount, as: :string, input_html: { inputmode: "decimal" } %>
+  <%= f.input :paid_on, as: :date, html5: true %>
+  <%= f.input :payment_method, collection: Payment.payment_methods.keys.map { |m| [ m.humanize, m ] }, include_blank: false %>
+  <%= f.input :notes %>
+
+  <div class="d-flex gap-2">
+    <%= f.button :submit, class: "btn btn-primary" %>
+    <%= link_to "Cancel", payments_path, class: "btn btn-link" %>
+  </div>
+<% end %>

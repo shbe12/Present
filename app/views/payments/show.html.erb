@@ -1,0 +1,9 @@
+<h1 class="h3 mb-4">Payment</h1>
+<dl class="row">
+  <dt class="col-sm-3">Member</dt><dd class="col-sm-9"><%= link_to @payment.member.name, @payment.member %></dd>
+  <dt class="col-sm-3">Amount</dt><dd class="col-sm-9"><%= money(@payment.amount) %></dd>
+  <dt class="col-sm-3">Paid on</dt><dd class="col-sm-9"><%= @payment.paid_on %></dd>
+  <dt class="col-sm-3">Method</dt><dd class="col-sm-9"><%= @payment.payment_method.humanize %></dd>
+  <dt class="col-sm-3">Notes</dt><dd class="col-sm-9"><%= @payment.notes.presence || "—" %></dd>
+</dl>
+<%= link_to "Back to payments", payments_path, class: "btn btn-link px-0" %>

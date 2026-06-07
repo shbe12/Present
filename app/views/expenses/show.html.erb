@@ -1,0 +1,8 @@
+<h1 class="h3 mb-4">Expense</h1>
+<dl class="row">
+  <dt class="col-sm-3">Category</dt><dd class="col-sm-9"><%= @expense.category.humanize %></dd>
+  <dt class="col-sm-3">Amount</dt><dd class="col-sm-9"><%= money(@expense.amount) %></dd>
+  <dt class="col-sm-3">Description</dt><dd class="col-sm-9"><%= @expense.description.presence || "—" %></dd>
+  <dt class="col-sm-3">Spent on</dt><dd class="col-sm-9"><%= @expense.spent_on %></dd>
+</dl>
+<%= link_to "Back to expenses", expenses_path, class: "btn btn-link px-0" %>

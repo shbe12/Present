@@ -1,0 +1,18 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">Attendance</h1>
+  <div class="btn-group">
+    <%= link_to "Edit", edit_attendance_path(@attendance), class: "btn btn-outline-secondary" %>
+    <%= link_to "Delete", @attendance, data: { turbo_method: :delete, turbo_confirm: "Delete this record?" }, class: "btn btn-outline-danger" %>
+  </div>
+</div>
+
+<dl class="row">
+  <dt class="col-sm-2">Member</dt><dd class="col-sm-10"><%= link_to @attendance.member.name, @attendance.member %></dd>
+  <dt class="col-sm-2">Date</dt><dd class="col-sm-10"><%= @attendance.date %></dd>
+  <dt class="col-sm-2">Status</dt><dd class="col-sm-10"><%= attendance_status_badge(@attendance.status) %></dd>
+  <dt class="col-sm-2">Notes</dt><dd class="col-sm-10"><%= @attendance.notes.presence || "—" %></dd>
+  <% if @attendance.charge %>
+    <dt class="col-sm-2">Auto charge</dt>
+    <dd class="col-sm-10"><%= @attendance.charge.charge_type.humanize %> — <%= money(@attendance.charge.amount) %></dd>
+  <% end %>
+</dl>

@@ -1,0 +1,43 @@
+<%#
+  Self-contained so it can be re-rendered standalone by a Turbo Stream broadcast
+  whenever a Member/Charge/Payment/Expense commits. Root id is the broadcast target.
+%>
+<% members_count    = Member.count
+   active_count     = Member.active.count
+   total_paid       = Payment.sum(:amount)
+   treasury_balance = total_paid - Expense.sum(:amount)
+   outstanding      = Charge.sum(:amount) - total_paid %>
+<div class="row g-3" id="dashboard_stats">
+  <div class="col-sm-6 col-lg-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted">Treasury balance</h6>
+        <p class="display-6 mb-0 <%= "text-danger" if treasury_balance.negative? %>"><%= money(treasury_balance) %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted">Outstanding balances</h6>
+        <p class="display-6 mb-0 <%= "text-danger" if outstanding.positive? %>"><%= money(outstanding) %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted">Total collected</h6>
+        <p class="display-6 mb-0"><%= money(total_paid) %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted">Members</h6>
+        <p class="display-6 mb-0"><%= active_count %> <small class="text-muted fs-6">of <%= members_count %> active</small></p>
+      </div>
+    </div>
+  </div>
+</div>

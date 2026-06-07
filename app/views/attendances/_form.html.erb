@@ -1,0 +1,13 @@
+<%= simple_form_for @attendance do |f| %>
+  <%= f.association :member, collection: Member.active.order(:name), include_blank: false %>
+  <%= f.input :date, as: :date, html5: true %>
+  <%= f.input :status, collection: Attendance.statuses.keys.map { |s| [ s.humanize, s ] }, include_blank: false %>
+  <%= f.input :notes %>
+
+  <p class="text-muted small">A late attendance automatically charges <%= money(Attendance::LATE_FEE) %>; a no-show charges <%= money(Attendance::NO_SHOW_FEE) %>.</p>
+
+  <div class="d-flex gap-2">
+    <%= f.button :submit, class: "btn btn-primary" %>
+    <%= link_to "Cancel", attendances_path, class: "btn btn-link" %>
+  </div>
+<% end %>

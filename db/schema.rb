@@ -10,9 +10,63 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_07_014720) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_07_194333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "attendances", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.bigint "member_id", null: false
+    t.text "notes"
+    t.string "status", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id", "date"], name: "index_attendances_on_member_id_and_date", unique: true
+    t.index ["member_id"], name: "index_attendances_on_member_id"
+  end
+
+  create_table "charges", force: :cascade do |t|
+    t.decimal "amount", precision: 8, scale: 2, null: false
+    t.bigint "attendance_id"
+    t.string "charge_type", null: false
+    t.datetime "created_at", null: false
+    t.string "description"
+    t.date "due_date"
+    t.bigint "member_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attendance_id"], name: "index_charges_on_attendance_id"
+    t.index ["member_id"], name: "index_charges_on_member_id"
+  end
+
+  create_table "expenses", force: :cascade do |t|
+    t.decimal "amount", precision: 8, scale: 2, null: false
+    t.string "category", null: false
+    t.datetime "created_at", null: false
+    t.string "description"
+    t.date "spent_on", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "members", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.date "joined_on"
+    t.string "name", null: false
+    t.string "phone"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.decimal "amount", precision: 8, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.bigint "member_id", null: false
+    t.text "notes"
+    t.date "paid_on", null: false
+    t.string "payment_method", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id"], name: "index_payments_on_member_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -25,4 +79,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_014720) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "attendances", "members"
+  add_foreign_key "charges", "attendances"
+  add_foreign_key "charges", "members"
+  add_foreign_key "payments", "members"
 end

@@ -1,0 +1,92 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">Dashboard</h1>
+  <div class="btn-group">
+    <%= link_to "Record attendance", new_attendance_path, class: "btn btn-primary" %>
+    <%= link_to "Record payment", new_payment_path, class: "btn btn-outline-primary" %>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-lg-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted">Treasury balance</h6>
+        <p class="display-6 mb-0 <%= "text-danger" if @treasury_balance.negative? %>"><%= money(@treasury_balance) %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted">Outstanding balances</h6>
+        <p class="display-6 mb-0 <%= "text-danger" if @outstanding.positive? %>"><%= money(@outstanding) %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted">Total collected</h6>
+        <p class="display-6 mb-0"><%= money(@total_paid) %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted">Members</h6>
+        <p class="display-6 mb-0"><%= @active_count %> <small class="text-muted fs-6">of <%= @members_count %> active</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-4">
+    <h2 class="h5">Recent attendance</h2>
+    <% if @recent_attendances.any? %>
+      <ul class="list-group">
+        <% @recent_attendances.each do |attendance| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><%= link_to attendance.member.name, attendance.member %> <span class="text-muted small"><%= attendance.date %></span></span>
+            <%= attendance_status_badge(attendance.status) %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No attendance recorded yet.</p>
+    <% end %>
+  </div>
+
+  <div class="col-lg-4">
+    <h2 class="h5">Recent payments</h2>
+    <% if @recent_payments.any? %>
+      <ul class="list-group">
+        <% @recent_payments.each do |payment| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><%= link_to payment.member.name, payment.member %> <span class="text-muted small"><%= payment.paid_on %></span></span>
+            <span class="fw-semibold"><%= money(payment.amount) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No payments recorded yet.</p>
+    <% end %>
+  </div>
+
+  <div class="col-lg-4">
+    <h2 class="h5">Recent expenses</h2>
+    <% if @recent_expenses.any? %>
+      <ul class="list-group">
+        <% @recent_expenses.each do |expense| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><%= expense.category.humanize %> <span class="text-muted small"><%= expense.spent_on %></span></span>
+            <span class="fw-semibold"><%= money(expense.amount) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No expenses recorded yet.</p>
+    <% end %>
+  </div>
+</div>

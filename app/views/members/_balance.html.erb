@@ -1,0 +1,3 @@
+<%= tag.span money(member.balance_due),
+      id: dom_id(member, :balance),
+      class: class_names("member-balance", "text-danger fw-semibold" => member.balance_due.positive?) %>

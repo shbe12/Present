@@ -1,0 +1,79 @@
+<%= turbo_stream_from "members" %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="h3 mb-0"><%= @member.name %></h1>
+    <% unless @member.active? %><span class="badge text-bg-secondary">Inactive</span><% end %>
+  </div>
+  <div class="btn-group">
+    <%= link_to "Edit", edit_member_path(@member), class: "btn btn-outline-secondary" %>
+    <%= link_to "Delete", @member, data: { turbo_method: :delete, turbo_confirm: "Delete this member and all their records?" }, class: "btn btn-outline-danger" %>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted">Balance due</h6>
+        <p class="display-6 mb-0"><%= render "members/balance", member: @member %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">Phone</dt><dd class="col-sm-9"><%= @member.phone.presence || "—" %></dd>
+      <dt class="col-sm-3">Email</dt><dd class="col-sm-9"><%= @member.email.presence || "—" %></dd>
+      <dt class="col-sm-3">Joined</dt><dd class="col-sm-9"><%= @member.joined_on || "—" %></dd>
+    </dl>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h2 class="h5 mb-0">Charges</h2>
+      <%= link_to "Add charge", new_charge_path(charge: { member_id: @member.id }), class: "btn btn-sm btn-outline-primary" %>
+    </div>
+    <% if @charges.any? %>
+      <table class="table table-sm">
+        <thead><tr><th>Date</th><th>Type</th><th>Description</th><th class="text-end">Amount</th></tr></thead>
+        <tbody>
+          <% @charges.each do |charge| %>
+            <tr>
+              <td><%= charge.due_date || charge.created_at.to_date %></td>
+              <td><%= charge.charge_type.humanize %></td>
+              <td><%= charge.description %></td>
+              <td class="text-end"><%= money(charge.amount) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="text-muted">No charges.</p>
+    <% end %>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h2 class="h5 mb-0">Payments</h2>
+      <%= link_to "Record payment", new_payment_path(payment: { member_id: @member.id }), class: "btn btn-sm btn-outline-primary" %>
+    </div>
+    <% if @payments.any? %>
+      <table class="table table-sm">
+        <thead><tr><th>Date</th><th>Method</th><th class="text-end">Amount</th></tr></thead>
+        <tbody>
+          <% @payments.each do |payment| %>
+            <tr>
+              <td><%= payment.paid_on %></td>
+              <td><%= payment.payment_method.humanize %></td>
+              <td class="text-end"><%= money(payment.amount) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="text-muted">No payments.</p>
+    <% end %>
+  </div>
+</div>

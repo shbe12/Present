@@ -1,0 +1,11 @@
+<%= simple_form_for @expense do |f| %>
+  <%= f.input :category, collection: Expense.categories.keys.map { |c| [ c.humanize, c ] }, include_blank: false %>
+  <%= f.input :amount, as: :string, input_html: { inputmode: "decimal" } %>
+  <%= f.input :description %>
+  <%= f.input :spent_on, as: :date, html5: true %>
+
+  <div class="d-flex gap-2">
+    <%= f.button :submit, class: "btn btn-primary" %>
+    <%= link_to "Cancel", expenses_path, class: "btn btn-link" %>
+  </div>
+<% end %>

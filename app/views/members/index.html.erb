@@ -1,0 +1,45 @@
+<%= turbo_stream_from "members" %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">Members</h1>
+  <%= link_to "New member", new_member_path, class: "btn btn-primary" %>
+</div>
+
+<% if @members.any? %>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th class="text-end">Balance due</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @members.each do |member| %>
+          <tr>
+            <td><%= link_to member.name, member %></td>
+            <td><%= member.phone %></td>
+            <td><%= member.email %></td>
+            <td>
+              <% if member.active? %>
+                <span class="badge text-bg-success">Active</span>
+              <% else %>
+                <span class="badge text-bg-secondary">Inactive</span>
+              <% end %>
+            </td>
+            <td class="text-end"><%= render "members/balance", member: member %></td>
+            <td class="text-end">
+              <%= link_to "Edit", edit_member_path(member), class: "btn btn-sm btn-outline-secondary" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <p class="text-muted">No members yet. <%= link_to "Add the first one", new_member_path %>.</p>
+<% end %>

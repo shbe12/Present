@@ -1,0 +1,12 @@
+<%= simple_form_for @charge do |f| %>
+  <%= f.association :member, collection: Member.order(:name), include_blank: false %>
+  <%= f.input :charge_type, collection: Charge.charge_types.keys.map { |t| [ t.humanize, t ] }, include_blank: false %>
+  <%= f.input :amount, as: :string, input_html: { inputmode: "decimal" } %>
+  <%= f.input :description %>
+  <%= f.input :due_date, as: :date, html5: true %>
+
+  <div class="d-flex gap-2">
+    <%= f.button :submit, class: "btn btn-primary" %>
+    <%= link_to "Cancel", charges_path, class: "btn btn-link" %>
+  </div>
+<% end %>

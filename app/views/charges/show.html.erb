@@ -1,0 +1,9 @@
+<h1 class="h3 mb-4">Charge</h1>
+<dl class="row">
+  <dt class="col-sm-3">Member</dt><dd class="col-sm-9"><%= link_to @charge.member.name, @charge.member %></dd>
+  <dt class="col-sm-3">Type</dt><dd class="col-sm-9"><%= @charge.charge_type.humanize %></dd>
+  <dt class="col-sm-3">Amount</dt><dd class="col-sm-9"><%= money(@charge.amount) %></dd>
+  <dt class="col-sm-3">Description</dt><dd class="col-sm-9"><%= @charge.description.presence || "—" %></dd>
+  <dt class="col-sm-3">Due date</dt><dd class="col-sm-9"><%= @charge.due_date || "—" %></dd>
+</dl>
+<%= link_to "Back to charges", charges_path, class: "btn btn-link px-0" %>
