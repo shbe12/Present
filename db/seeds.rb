@@ -7,3 +7,31 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+puts "Resetting members..."
+
+Member.destroy_all
+
+puts "Creating members..."
+
+members = [
+  "Sarah Martin",
+  "Michael Brown",
+  "Jessica Lee",
+  "David Kim",
+  "Emma Johnson",
+  "Daniel Smith",
+  "Olivia Wilson",
+  "James Taylor",
+  "Sophia Anderson"
+]
+
+members.each do |name|
+  Member.create!(
+    name: name,
+    active: true
+  )
+end
+
+puts "Done!"
+puts "Members created: #{Member.count}"
