@@ -3,42 +3,57 @@
   <div class="btn-group">
     <%= link_to "Record attendance", new_attendance_path, class: "btn btn-primary" %>
     <%= link_to "Record payment", new_payment_path, class: "btn btn-outline-primary" %>
+    <%= link_to "Record charge", new_charge_path, class: "btn btn-outline-primary" %>
   </div>
 </div>
 
 <div class="row g-3 mb-4">
   <div class="col-sm-6 col-lg-3">
+  <%= link_to treasury_report_path, class: "text-decoration-none text-reset" do %>
     <div class="card h-100">
       <div class="card-body">
         <h6 class="card-subtitle text-muted">Treasury balance</h6>
-        <p class="display-6 mb-0 <%= "text-danger" if @treasury_balance.negative? %>"><%= money(@treasury_balance) %></p>
+        <p class="display-6 mb-0 <%= "text-danger" if @treasury_balance.negative? %>">
+          <%= money(@treasury_balance) %>
+        </p>
       </div>
     </div>
-  </div>
+  <% end %>
+</div>
   <div class="col-sm-6 col-lg-3">
+  <%= link_to balances_report_path, class: "text-decoration-none text-reset" do %>
     <div class="card h-100">
       <div class="card-body">
-        <h6 class="card-subtitle text-muted">Outstanding Balance (Members Owe)</h6>
-        <p class="display-6 mb-0 <%= "text-danger" if @outstanding.positive? %>"><%= money(@outstanding) %></p>
+        <h6 class="card-subtitle text-muted">
+          Outstanding Balance (Members Owe)
+        </h6>
+        <p class="display-6 mb-0 <%= "text-danger" if @outstanding.positive? %>">
+          <%= money(@outstanding) %>
+        </p>
       </div>
     </div>
-  </div>
+  <% end %>
+</div>
   <div class="col-sm-6 col-lg-3">
+  <%= link_to payments_path, class: "text-decoration-none text-reset" do %>
     <div class="card h-100">
       <div class="card-body">
         <h6 class="card-subtitle text-muted">Total collected</h6>
         <p class="display-6 mb-0"><%= money(@total_paid) %></p>
       </div>
     </div>
-  </div>
+  <% end %>
+</div>
   <div class="col-sm-6 col-lg-3">
+  <%= link_to expenses_path, class: "text-decoration-none text-reset" do %>
     <div class="card h-100">
       <div class="card-body">
         <h6 class="card-subtitle text-muted">Total expenses</h6>
         <p class="display-6 mb-0"><%= money(@expense) %></p>
       </div>
     </div>
-  </div>
+  <% end %>
+</div>
   <div class="col-sm-6 col-lg-3">
     <div class="card h-100">
       <div class="card-body">
