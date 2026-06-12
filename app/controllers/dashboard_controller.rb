@@ -11,6 +11,7 @@ class DashboardController < ApplicationController
 
 
     @recent_attendances = Attendance.includes(:member).order(date: :desc).limit(5)
+    @recent_charges     = Charge.includes(:member).recent.limit(5)
     @recent_payments    = Payment.includes(:member).recent.limit(5)
     @recent_expenses    = Expense.recent.limit(5)
   end

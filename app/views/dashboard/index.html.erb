@@ -72,15 +72,18 @@
 </div>
 
 <div class="row g-4">
-  <div class="col-lg-4">
+  <div class="col-md-6 col-lg-3">
     <h2 class="h5">Recent attendance</h2>
     <% if @recent_attendances.any? %>
       <ul class="list-group">
         <% @recent_attendances.each do |attendance| %>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span><%= link_to attendance.member.name, attendance.member %> <span class="text-muted small"><%= attendance.date %></span></span>
+          <%= link_to edit_attendance_path(attendance), class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center" do %>
+            <span>
+              <%= attendance.member.name %>
+              <span class="text-muted small d-block"><%= attendance.date %></span>
+            </span>
             <%= attendance_status_badge(attendance.status) %>
-          </li>
+          <% end %>
         <% end %>
       </ul>
     <% else %>
@@ -88,15 +91,37 @@
     <% end %>
   </div>
 
-  <div class="col-lg-4">
+  <div class="col-md-6 col-lg-3">
+    <h2 class="h5">Recent charges</h2>
+    <% if @recent_charges.any? %>
+      <ul class="list-group">
+        <% @recent_charges.each do |charge| %>
+          <%= link_to edit_charge_path(charge), class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center" do %>
+            <span>
+              <%= charge.member.name %>
+              <span class="text-muted small d-block"><%= charge.charge_type.humanize %></span>
+            </span>
+            <span class="fw-semibold"><%= money(charge.amount) %></span>
+          <% end %>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No charges recorded yet.</p>
+    <% end %>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
     <h2 class="h5">Recent payments</h2>
     <% if @recent_payments.any? %>
       <ul class="list-group">
         <% @recent_payments.each do |payment| %>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span><%= link_to payment.member.name, payment.member %> <span class="text-muted small"><%= payment.paid_on %></span></span>
+          <%= link_to edit_payment_path(payment), class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center" do %>
+            <span>
+              <%= payment.member.name %>
+              <span class="text-muted small d-block"><%= payment.paid_on %></span>
+            </span>
             <span class="fw-semibold"><%= money(payment.amount) %></span>
-          </li>
+          <% end %>
         <% end %>
       </ul>
     <% else %>
@@ -104,15 +129,18 @@
     <% end %>
   </div>
 
-  <div class="col-lg-4">
+  <div class="col-md-6 col-lg-3">
     <h2 class="h5">Recent expenses</h2>
     <% if @recent_expenses.any? %>
       <ul class="list-group">
         <% @recent_expenses.each do |expense| %>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span><%= expense.category.humanize %> <span class="text-muted small"><%= expense.spent_on %></span></span>
+          <%= link_to edit_expense_path(expense), class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center" do %>
+            <span>
+              <%= expense.category.humanize %>
+              <span class="text-muted small d-block"><%= expense.spent_on %></span>
+            </span>
             <span class="fw-semibold"><%= money(expense.amount) %></span>
-          </li>
+          <% end %>
         <% end %>
       </ul>
     <% else %>

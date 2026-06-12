@@ -22,7 +22,7 @@
           <% charged = member.charges.sum(&:amount); paid = member.payments.sum(&:amount) %>
           <tr>
             <td><%= link_to member.name, member %></td>
-            <td class="text-end"><%= money(charged) %></td>
+            <td class="text-end"><%= link_to money(charged), charges_path(member_id: member.id) %></td>
             <td class="text-end"><%= money(paid) %></td>
             <td class="text-end"><%= render "members/balance", member: member %></td>
           </tr>

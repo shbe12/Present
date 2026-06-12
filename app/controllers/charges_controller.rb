@@ -3,6 +3,7 @@ class ChargesController < ApplicationController
 
   def index
     @charges = Charge.includes(:member).recent
+    @charges = @charges.where(member_id: params[:member_id]) if params[:member_id].present?
   end
 
   def show

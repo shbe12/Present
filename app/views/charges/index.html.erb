@@ -20,13 +20,9 @@
             </td>
             <td><%= charge.description %></td>
             <td class="text-end"><%= money(charge.amount) %></td>
-            <td class="text-end">
-              <% if charge.automatic? %>
-                <span class="text-muted small">via attendance</span>
-              <% else %>
-                <%= link_to "Edit", edit_charge_path(charge), class: "btn btn-sm btn-outline-secondary" %>
-                <%= link_to "Delete", charge, data: { turbo_method: :delete, turbo_confirm: "Delete this charge?" }, class: "btn btn-sm btn-outline-danger" %>
-              <% end %>
+            <td class="text-end text-nowrap">
+              <%= link_to "Edit", edit_charge_path(charge), class: "btn btn-sm btn-outline-secondary" %>
+              <%= link_to "Delete", charge, data: { turbo_method: :delete, turbo_confirm: "Delete this charge?" }, class: "btn btn-sm btn-outline-danger" %>
             </td>
           </tr>
         <% end %>
