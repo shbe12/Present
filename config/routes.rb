@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users
+  devise_for :members, path: "member", controllers: {
+    sessions: "members/sessions",
+    passwords: "members/passwords"
+  }
+
+  # Member self-service portal
+  namespace :portal do
+    root to: "dashboard#show"
+  end
 
   resources :members
   resources :attendances

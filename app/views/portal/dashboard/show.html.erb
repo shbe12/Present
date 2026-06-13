@@ -1,0 +1,109 @@
+<% content_for :title, "My Account – Present" %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="h3 mb-0">Hello, <%= @member.name %></h1>
+    <p class="text-muted mb-0 small">Member since <%= @member.joined_on&.strftime("%B %Y") || "—" %></p>
+  </div>
+</div>
+
+<%# Balance summary card %>
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-lg-4">
+    <div class="card h-100 <%= @member.amount_owed.positive? ? "border-danger" : "border-success" %>">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted mb-2">Current balance</h6>
+        <% if @member.amount_owed.positive? %>
+          <p class="display-6 mb-0 text-danger"><%= money(@member.amount_owed) %></p>
+          <p class="text-muted small mb-0 mt-1">outstanding — please make a payment</p>
+        <% else %>
+          <p class="display-6 mb-0 text-success">All paid up</p>
+          <p class="text-muted small mb-0 mt-1">no outstanding balance</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted mb-2">Total charged</h6>
+        <p class="display-6 mb-0"><%= money(@charges.sum(&:amount)) %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle text-muted mb-2">Total paid</h6>
+        <p class="display-6 mb-0 text-success"><%= money(@payments.sum(&:amount)) %></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <%# Attendance history %>
+  <div class="col-lg-4">
+    <h2 class="h5 mb-3">Attendance history</h2>
+    <% if @attendances.any? %>
+      <ul class="list-group">
+        <% @attendances.each do |a| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>
+              <%= a.date.strftime("%b %-d, %Y") %>
+              <% if a.notes.present? %>
+                <span class="text-muted small d-block"><%= a.notes %></span>
+              <% end %>
+            </span>
+            <%= attendance_status_badge(a.status) %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No attendance records yet.</p>
+    <% end %>
+  </div>
+
+  <%# Charges %>
+  <div class="col-lg-4">
+    <h2 class="h5 mb-3">Charges</h2>
+    <% if @charges.any? %>
+      <ul class="list-group">
+        <% @charges.each do |charge| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>
+              <%= charge.charge_type.humanize %>
+              <% if charge.description.present? %>
+                <span class="text-muted small d-block"><%= charge.description %></span>
+              <% end %>
+              <span class="text-muted small d-block"><%= charge.created_at.strftime("%b %-d, %Y") %></span>
+            </span>
+            <span class="fw-semibold text-danger"><%= money(charge.amount) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No charges on your account.</p>
+    <% end %>
+  </div>
+
+  <%# Payments %>
+  <div class="col-lg-4">
+    <h2 class="h5 mb-3">Payment history</h2>
+    <% if @payments.any? %>
+      <ul class="list-group">
+        <% @payments.each do |payment| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>
+              <%= payment.paid_on.strftime("%b %-d, %Y") %>
+              <span class="text-muted small d-block"><%= payment.payment_method.humanize %></span>
+            </span>
+            <span class="fw-semibold text-success"><%= money(payment.amount) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No payments recorded yet.</p>
+    <% end %>
+  </div>
+</div>

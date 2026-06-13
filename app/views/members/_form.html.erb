@@ -1,7 +1,7 @@
 <%= simple_form_for @member do |f| %>
   <%= f.input :name %>
   <%= f.input :phone %>
-  <%= f.input :email %>
+  <%= f.input :email, hint: "Used for member portal login. The member can set their own password via 'Forgot password'." %>
   <%= f.input :joined_on, as: :date, html5: true %>
   <%= f.input :active %>
 

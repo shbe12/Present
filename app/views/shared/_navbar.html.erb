@@ -29,7 +29,8 @@
         </ul>
       <% else %>
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><%= link_to "Login", new_user_session_path, class: "nav-link" %></li>
+          <li class="nav-item"><%= link_to "Admin Login", new_user_session_path, class: "nav-link" %></li>
+          <li class="nav-item"><%= link_to "Member Portal", new_member_session_path, class: "nav-link" %></li>
         </ul>
       <% end %>
     </div>
