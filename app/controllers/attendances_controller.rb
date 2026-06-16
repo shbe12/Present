@@ -8,6 +8,41 @@ class AttendancesController < ApplicationController
   def show
   end
 
+  def bulk_new
+    @date = params[:date].presence || Date.current
+    @members = Member.active.order(:name)
+    @existing = Attendance.where(date: @date, member: @members).pluck(:member_id)
+  end
+
+  def bulk_create
+    date = params[:date].presence || Date.current
+    member_attrs = params[:members] || {}
+
+    created = 0
+    skipped = []
+
+    member_attrs.each do |member_id, attrs|
+      next if attrs[:status].blank?
+
+      attendance = Attendance.new(
+        member_id: member_id,
+        date: date,
+        status: attrs[:status],
+        notes: attrs[:notes].presence
+      )
+
+      if attendance.save
+        created += 1
+      else
+        member_name = Member.find(member_id).name
+        skipped << "#{member_name}: #{attendance.errors.full_messages.join(', ')}"
+      end
+    end
+
+    flash[:alert] = "Skipped — #{skipped.join('; ')}" if skipped.any?
+    redirect_to attendances_path, notice: "#{created} attendance record(s) saved."
+  end
+
   def new
     @attendance = Attendance.new(date: Date.current)
   end

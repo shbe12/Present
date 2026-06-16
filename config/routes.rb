@@ -11,7 +11,12 @@ Rails.application.routes.draw do
   end
 
   resources :members
-  resources :attendances
+  resources :attendances do
+    collection do
+      get  :bulk_new
+      post :bulk_create
+    end
+  end
   resources :charges
   resources :payments
   resources :expenses

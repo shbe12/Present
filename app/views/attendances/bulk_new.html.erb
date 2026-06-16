@@ -1,0 +1,78 @@
+<h1 class="h3 mb-4">Record Attendance</h1>
+
+<% if @members.empty? %>
+  <p class="text-muted">No active members found. <%= link_to "Add a member", new_member_path %> first.</p>
+<% else %>
+  <%= form_with url: bulk_create_attendances_path, method: :post do |f| %>
+    <div class="card mb-4" data-controller="attendance-date">
+      <div class="card-body d-flex align-items-center gap-3">
+        <label class="form-label fw-semibold mb-0" for="date">Date</label>
+        <input type="date" id="date" name="date" value="<%= @date %>" class="form-control"
+               style="max-width: 200px"
+               data-attendance-date-target="date"
+               data-action="change->attendance-date#reload">
+        <span class="text-muted small">Defaults to today. Change to load members for a different date.</span>
+      </div>
+    </div>
+
+    <% if @existing.any? %>
+      <div class="alert alert-warning">
+        <%= @existing.size %> member(s) already have an attendance record for this date and will be skipped.
+      </div>
+    <% end %>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Member</th>
+            <% Attendance.statuses.each_key do |s| %>
+              <th class="text-center"><%= s.humanize %></th>
+            <% end %>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @members.each do |member| %>
+            <% already_recorded = @existing.include?(member.id) %>
+            <tr class="<%= 'table-secondary text-muted' if already_recorded %>">
+              <td>
+                <%= member.name %>
+                <% if already_recorded %>
+                  <span class="badge bg-secondary ms-1">already recorded</span>
+                <% end %>
+              </td>
+              <% Attendance.statuses.each_key do |status| %>
+                <td class="text-center">
+                  <input type="radio"
+                         name="members[<%= member.id %>][status]"
+                         value="<%= status %>"
+                         class="form-check-input"
+                         <%= "checked" if status == "present" %>
+                         <%= "disabled" if already_recorded %>>
+                </td>
+              <% end %>
+              <td>
+                <input type="text"
+                       name="members[<%= member.id %>][notes]"
+                       class="form-control form-control-sm"
+                       placeholder="Notes"
+                       <%= "disabled" if already_recorded %>>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-muted small">
+      Late attendance auto-charges <%= money(Attendance::LATE_FEE) %>;
+      no-show charges <%= money(Attendance::NO_SHOW_FEE) %>.
+    </p>
+
+    <div class="d-flex gap-2">
+      <%= f.submit "Save All", class: "btn btn-primary" %>
+      <%= link_to "Cancel", attendances_path, class: "btn btn-link" %>
+    </div>
+  <% end %>
+<% end %>
