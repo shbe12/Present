@@ -8,30 +8,34 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-puts "Resetting members..."
+if Rails.env.development?
+  puts "Resetting members..."
 
-Member.destroy_all
+  Member.destroy_all
 
-puts "Creating members..."
+  puts "Creating members..."
 
-members = [
-  "Sarah Martin",
-  "Michael Brown",
-  "Jessica Lee",
-  "David Kim",
-  "Emma Johnson",
-  "Daniel Smith",
-  "Olivia Wilson",
-  "James Taylor",
-  "Sophia Anderson"
-]
+  members = [
+    "Sarah Martin",
+    "Michael Brown",
+    "Jessica Lee",
+    "David Kim",
+    "Emma Johnson",
+    "Daniel Smith",
+    "Olivia Wilson",
+    "James Taylor",
+    "Sophia Anderson"
+  ]
 
-members.each do |name|
-  Member.create!(
-    name: name,
-    active: true
-  )
+  members.each do |name|
+    Member.create!(
+      name: name,
+      active: true
+    )
+  end
+
+  puts "Done!"
+  puts "Members created: #{Member.count}"
+else
+  puts "Skipping demo data seed outside development."
 end
-
-puts "Done!"
-puts "Members created: #{Member.count}"
