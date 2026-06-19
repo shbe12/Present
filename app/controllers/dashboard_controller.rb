@@ -10,7 +10,7 @@ class DashboardController < ApplicationController
     @expense          = Expense.sum(:amount)
 
 
-    @recent_attendances = Attendance.includes(:member).order(date: :desc).limit(5)
+    @recent_attendances = Attendance.includes(:member).where(status: %w[late no_show]).order(date: :desc).limit(5)
     @recent_charges     = Charge.includes(:member).recent.limit(5)
     @recent_payments    = Payment.includes(:member).recent.limit(5)
     @recent_expenses    = Expense.recent.limit(5)

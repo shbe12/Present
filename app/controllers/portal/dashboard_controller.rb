@@ -1,5 +1,6 @@
 class Portal::DashboardController < ApplicationController
   layout "portal"
+  skip_before_action :authenticate_user!
   before_action :authenticate_member!
 
   def show

@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h1 class="h3 mb-0">Dashboard</h1>
   <div class="btn-group">
-    <%= link_to "Record attendance", new_attendance_path, class: "btn btn-primary" %>
+    <%= link_to "Record attendance", bulk_new_attendances_path, class: "btn btn-primary" %>
     <%= link_to "Record payment", new_payment_path, class: "btn btn-outline-primary" %>
     <%= link_to "Record charge", new_charge_path, class: "btn btn-outline-primary" %>
   </div>
@@ -73,7 +73,7 @@
 
 <div class="row g-4">
   <div class="col-md-6 col-lg-3">
-    <h2 class="h5">Recent attendance</h2>
+    <h2 class="h5">Recent lateness/absences</h2>
     <% if @recent_attendances.any? %>
       <ul class="list-group">
         <% @recent_attendances.each do |attendance| %>
