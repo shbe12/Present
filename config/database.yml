@@ -90,6 +90,7 @@ production:
     database: present_production
     username: present
     password: <%= ENV["PRESENT_DATABASE_PASSWORD"] %>
+    host: <%= ENV.fetch("DB_HOST", "localhost") %>
   cache:
     <<: *primary_production
     database: present_production_cache
