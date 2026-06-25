@@ -13,11 +13,12 @@ module RefreshesMemberBalance
 
   def refresh_member_balance
     return unless member
+
     # return if Rails.env.test? //guard broadcasts for testing.//
 
     broadcast_replace_to "members",
-      target: ActionView::RecordIdentifier.dom_id(member, :balance),
-      partial: "members/balance",
-      locals: { member: member }
+                         target: ActionView::RecordIdentifier.dom_id(member, :balance),
+                         partial: "members/balance",
+                         locals: { member: member }
   end
 end

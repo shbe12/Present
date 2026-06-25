@@ -1,3 +1,5 @@
-class Members::PasswordsController < Devise::PasswordsController
-  layout "portal"
+module Members
+  class PasswordsController < Devise::PasswordsController
+    layout "portal"
+  end
 end

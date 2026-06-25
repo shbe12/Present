@@ -16,28 +16,7 @@ class AttendancesController < ApplicationController
 
   def bulk_create
     date = params[:date].presence || Date.current
-    member_attrs = params[:members] || {}
-
-    created = 0
-    skipped = []
-
-    member_attrs.each do |member_id, attrs|
-      next if attrs[:status].blank?
-
-      attendance = Attendance.new(
-        member_id: member_id,
-        date: date,
-        status: attrs[:status],
-        notes: attrs[:notes].presence
-      )
-
-      if attendance.save
-        created += 1
-      else
-        member_name = Member.find(member_id).name
-        skipped << "#{member_name}: #{attendance.errors.full_messages.join(', ')}"
-      end
-    end
+    created, skipped = save_bulk_attendances(date, params[:members] || {})
 
     flash[:alert] = "Skipped — #{skipped.join('; ')}" if skipped.any?
     redirect_to attendances_path, notice: "#{created} attendance record(s) saved."
@@ -80,5 +59,27 @@ class AttendancesController < ApplicationController
 
   def attendance_params
     params.require(:attendance).permit(:member_id, :date, :status, :notes)
+  end
+
+  def save_bulk_attendances(date, member_attrs)
+    created = 0
+    skipped = []
+
+    member_attrs.each do |member_id, attrs|
+      next if attrs[:status].blank?
+
+      attendance = build_attendance(member_id, date, attrs)
+      attendance.save ? created += 1 : skipped << attendance_error(member_id, attendance)
+    end
+
+    [created, skipped]
+  end
+
+  def build_attendance(member_id, date, attrs)
+    Attendance.new(member_id: member_id, date: date, status: attrs[:status], notes: attrs[:notes].presence)
+  end
+
+  def attendance_error(member_id, attendance)
+    "#{Member.find(member_id).name}: #{attendance.errors.full_messages.join(', ')}"
   end
 end
