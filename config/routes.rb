@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, skip: [:registrations]
   devise_for :members, path: "member", controllers: {
     sessions: "members/sessions",
     passwords: "members/passwords"
