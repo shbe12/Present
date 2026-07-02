@@ -1,5 +1,5 @@
 class MembersController < ApplicationController
-  before_action :set_member, only: %i[show edit update destroy]
+  before_action :set_member, only: %i[show edit update destroy invite]
 
   def index
     @members = Member.includes(:charges, :payments).order(:name)
@@ -20,7 +20,8 @@ class MembersController < ApplicationController
   def create
     @member = Member.new(member_params)
     if @member.save
-      redirect_to @member, notice: "Member was successfully created."
+      @member.send_reset_password_instructions if @member.email.present?
+      redirect_to @member, notice: "Member created#{ ". Invite sent to #{@member.email}" if @member.email.present? }."
     else
       render :new, status: :unprocessable_entity
     end
@@ -37,6 +38,11 @@ class MembersController < ApplicationController
   def destroy
     @member.destroy
     redirect_to members_path, notice: "Member was successfully deleted.", status: :see_other
+  end
+
+  def invite
+    @member.send_reset_password_instructions
+    redirect_to @member, notice: "Invite sent to #{@member.email}."
   end
 
   private

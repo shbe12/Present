@@ -10,7 +10,9 @@ Rails.application.routes.draw do
     root to: "dashboard#show"
   end
 
-  resources :members
+  resources :members do
+    member { post :invite }
+  end
   resources :attendances do
     collection do
       get  :bulk_new

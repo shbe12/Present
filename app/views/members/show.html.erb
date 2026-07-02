@@ -6,6 +6,11 @@
     <% unless @member.active? %><span class="badge text-bg-secondary">Inactive</span><% end %>
   </div>
   <div class="btn-group">
+    <% if @member.email.present? && @member.encrypted_password.blank? %>
+      <%= button_to @member.reset_password_sent_at? ? "Resend Invite" : "Send Invite",
+            invite_member_path(@member),
+            class: "btn btn-outline-success" %>
+    <% end %>
     <%= link_to "Edit", edit_member_path(@member), class: "btn btn-outline-secondary" %>
     <%= link_to "Delete", @member, data: { turbo_method: :delete, turbo_confirm: "Delete this member and all their records?" }, class: "btn btn-outline-danger" %>
   </div>

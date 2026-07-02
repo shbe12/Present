@@ -2,6 +2,11 @@
 
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+  # Wait for Postgres to be ready before running db:prepare
+  until ./bin/rails runner "ActiveRecord::Base.connection.execute('SELECT 1')" 2>/dev/null; do
+    echo "Waiting for database..."
+    sleep 2
+  done
   ./bin/rails db:prepare
 fi
 
